@@ -1,2 +1,4 @@
-# wirepup
-Wireshark plugin to analyse a proprietary communication protocol under Ethernet
+Bpep
+====
+
+*Bpep is a proprietary Ethernet protocol Wireshark dissector plugin.*
