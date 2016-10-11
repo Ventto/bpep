@@ -23,7 +23,7 @@ set_module_info(bpep 0 0 1 0)
 include_directories (${GLIB2_INCLUDE_DIRS})
 include_directories (${WIRESHARK_INCLUDE_DIRS})
 
-set (LINK_MODE_MODULE SHARED)
+set (LINK_MODE_MODULE MODULE)
 
 set(DISSECTOR_SRC
   packet-bpep.c
