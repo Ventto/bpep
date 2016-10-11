@@ -1,72 +1,58 @@
-# CMakeLists.txt
-#
-# Wireshark - Network traffic analyzer
-# By Gerald Combs <gerald@wireshark.org>
-# Copyright 1998 Gerald Combs
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-#
+cmake_minimum_required (VERSION 2.8)
 
-include(WiresharkPlugin)
+project (Bpep C)
+
+set (MODULE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/.cmake/Modules")
+set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${MODULE_DIR})
+
+set (GLIB2_MIN_VERSION 2.4.0)
+
+find_package (Wireshark REQUIRED)
+find_package (GLIB2 REQUIRED)
+
+include (WiresharkPlugin)
+include (UseMakeDissectorReg)
+
+if (NOT WIRESHARK_PLUGIN_PATH)
+  set (WIRESHARK_PLUGIN_PATH "$ENV{HOME}/.wireshark/plugins")
+endif ()
 
 # Plugin name and version info (major minor micro extra)
 set_module_info(bpep 0 0 1 0)
 
+include_directories (${GLIB2_INCLUDE_DIRS})
+include_directories (${WIRESHARK_INCLUDE_DIRS})
+
+set (LINK_MODE_MODULE SHARED)
+
 set(DISSECTOR_SRC
-	packet-bpep.c
+  packet-bpep.c
 )
 
 set(PLUGIN_FILES
-	plugin.c
-	${DISSECTOR_SRC}
+  plugin.c
+  ${DISSECTOR_SRC}
 )
 
 set(CLEAN_FILES
-	${PLUGIN_FILES}
+  ${PLUGIN_FILES}
 )
-
-if (WERROR_COMMON_FLAGS)
-	set_source_files_properties(
-		${CLEAN_FILES}
-		PROPERTIES
-		COMPILE_FLAGS ${WERROR_COMMON_FLAGS}
-	)
-endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 register_dissector_files(plugin.c
-	plugin
-	${DISSECTOR_SRC}
+  plugin
+  ${DISSECTOR_SRC}
 )
 
 add_plugin_library(bpep)
 
-install(TARGETS bpep
-	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/${CPACK_PACKAGE_NAME}/plugins/${CPACK_PACKAGE_VERSION} NAMELINK_SKIP
-	RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}/${CPACK_PACKAGE_NAME}/plugins/${CPACK_PACKAGE_VERSION}
-	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/${CPACK_PACKAGE_NAME}/plugins/${CPACK_PACKAGE_VERSION}
-)
+set_property(TARGET bpep PROPERTY C_STANDARD 99)
 
-file(GLOB DISSECTOR_HEADERS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "*.h")
-CHECKAPI(
-	NAME
-	  bpep
-	SWITCHES
-	  -g abort -g termoutput -build
-	SOURCES
-	  ${DISSECTOR_SRC}
-	  ${DISSECTOR_HEADERS}
-)
+if (CMAKE_COMPILER_IS_GNUCC)
+  set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic")
+endif ()
+
+target_link_libraries(bpep ${WIRESHARK_LIBRARIES} ${GLIB2_LIBRARIES})
+
+install(TARGETS bpep DESTINATION ${WIRESHARK_PLUGIN_PATH})
