@@ -1,0 +1,22 @@
+group: stable
+os: linux
+
+sudo: required
+
+language: c
+
+before_install:
+    - sudo apt-get -qq update
+    - sudo add-apt-repository -y ppa:wireshark-dev/stable
+    - sudo apt-get -qq update
+    - sudo apt-get install libglib2.0-dev libwireshark-dev
+    - ls -l /usr/lib/x86_64-linux-gnu/ | grep libwireshark
+
+install:
+    - mkdir build && cd build
+    - cmake ..
+    - make
+    - make install
+
+script:
+    - ls -l ~/.config/wireshark/plugins/ | grep libbpep.so
