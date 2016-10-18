@@ -13,7 +13,22 @@ Bpep
 ## Requirements
 
 * *cmake*
-* *wireshark*
+* glib2
+* *wireshark-common*
+
+### Ubuntu
+
+```
+ $ sudo add-apt-repository -y ppa:wireshark-dev/stable
+ $ sudo apt-get update
+ $ sudo apt-get install libglib2.0-dev libwireshark-dev
+```
+
+### Arch
+
+```
+$ sudo pacman -S wireshark-common
+```
 
 ## Build
 
