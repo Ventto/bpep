@@ -14,7 +14,7 @@ include (WiresharkPlugin)
 include (UseMakeDissectorReg)
 
 if (NOT WIRESHARK_PLUGIN_PATH)
-  set (WIRESHARK_PLUGIN_PATH "$ENV{HOME}/.wireshark/plugins")
+  set (WIRESHARK_PLUGIN_PATH "$ENV{HOME}/.config/wireshark/plugins")
 endif ()
 
 # Plugin name and version info (major minor micro extra)
