@@ -6,14 +6,15 @@ Bpep
 [![Version](https://img.shields.io/badge/version-v0.1.0-blue.svg?style=flat)](https://github.com/Ventto/bpep/releases) 
 [![Status](https://img.shields.io/badge/status-experimental-orange.svg?style=flat)](https://github.com/Ventto/bpep/) 
 
-*Bpep is an Ethernet protocol Wireshark plugin.*
+*Bpep is an Ethernet protocol Wireshark standalone plugin.*
 
-**This plugin is under construction.**
+**Under construction, currently it is just a model base.**
 
-## Requirements
+## Dependencies
 
-* *cmake*
-* glib2
+### Packages
+
+* *glib2*
 * *wireshark-common*
 
 ### Ubuntu
@@ -27,7 +28,7 @@ Bpep
 ### Arch
 
 ```
-$ sudo pacman -S wireshark-common
+$ sudo pacman -S glib2 wireshark-common
 ```
 
 ## Build
